@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scribus version="2.0" scribus="1.8.0.svn">
+  <configuration>
+    <document language="en_UK">
+      <page unit="mm">
+        <size name="ISOA_A04" />
+        <margins top="10" bottom="10" left="10" right="10">
+      </page>
+      <layout pages="1" first-page="left" direction-horizontal="ltr" />
+    </document>
+    <colors>
+      <color name="black" space="rgb" r="000000" g="000000" b="000000" />
+    </colors>
+  </configuration>
+  <styles>
+    <paragraph>
+      <style name="default" id="0">
+      </style>
+    </paragraph>
+    <character>
+      <style name="default" id="0">
+      </style>
+    </character>
+  </styles>
+  <content>
+    <page id="1">
+    <page>
+  </content>
+</scribus>
+

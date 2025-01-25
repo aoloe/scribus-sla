@@ -1,0 +1,149 @@
+# cf. page 39 in the book for defining the items in a non "embedded" way
+grammar {
+
+  start = element-scribus
+
+  element-scribus = element scribus {
+    element-configuration,
+    element-styles,
+    element-colors,
+    element-fonts,
+    element-sections?,
+    element-content,
+  }
+
+  # common elements
+
+  element-page-size = element size {
+      (
+        attribute name { text } |
+        (
+          attribute width,
+          attribute height,
+        )
+      )
+  }
+
+  element-shape-sides = 
+    attribute top { text },
+    attribute bottom { text },
+    attribute left { text },
+    attribute right { text },
+
+  # start of configuration / content
+
+  element-configuration = element configuration {
+    element-document,
+    #...
+  }
+
+  element-document = element document {
+    element language {
+      attribute name { text }
+    },
+    element page {
+      attribute unit { text },
+      element size = element-page-size,
+      element margins {
+        attribute top { text },
+        attribute bottom { text },
+        (
+          ( attribute left { text },
+          attribute right { text } ) |
+          ( attribute inside { text },
+          attribute outside { text } ),
+        )
+      },
+      element printer-margins {
+        element-shape-sides
+        attribute preset { text }
+      }?,
+      element bleeds {
+        element-shape-sides
+      }? # if not defined, all zeros
+    },
+    element layout {
+      attribute pages { "1" | "2" },
+      attribute first-page { "left" | "right" }
+      attribute direction-horizontal { "ltr" | "rtl" }
+      # attribute direction-vertical { string } # not implemented yet
+    },
+    element saving {
+      attribute compressed { boolean }?,
+      element auto-save {
+        attribute automatic a:defaultValue="false" { xsd:boolean }?,
+        attribute keep-backup a:defaultValue="false" { xsd:boolean }?,
+        attribute countdown a:defaultValue="false" { xsd:boolean }?,
+        element target-path { text }?
+      }
+    }?,
+    element undo {
+      attribute enabled a:defaultValue="true" { xsd:boolean }?,
+      attribute history { text }?
+    }?
+  }
+
+  element-style-base = element style {
+    attribute id { text }
+    attribute name { text }
+  }
+
+  element-style-paragraph = element-style-base {
+  }
+
+  element-style-character = element-style-base {
+  }
+
+  element-style-table = element-style-base {
+  }
+
+  element-styles = element styles {
+    element-style-paragraph+,
+    element-style-character+,
+    element-style-table*,
+  }
+
+  element-colors = element colors { element-color+ }
+
+  element-color = element color {
+    attribute name { text }
+    atribute space { "cmyk" | "rgb" } # TODO: add the missing spaces
+    (
+      (
+        attribute r { text },
+        attribute g { text },
+        attribute b { text }
+      ) |
+      (
+        attribute c { text },
+        attribute m { text },
+        attribute y { text }
+        attribute k { text }
+      )
+
+  }
+
+  element-fonts = element fonts { element-font* }
+
+  element-font = element font {
+    attribute id { text },
+    attribute name { text },
+  }
+
+  element-sections = { element-section* } # if no section is defined, use the default values
+
+  element-section = element section {
+    attribute id { text },
+    attribute name { text }?,
+  }
+
+  element-page = element page {
+    attribute id { text }
+    attribute master-page a:defaultValue="false" { xsd:bool }?
+    element size = element-page-size
+  }
+
+  element-content = element content {
+    element-page+
+  }
+}
